@@ -2,13 +2,17 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
 import { Play, Pause } from 'phosphor-react-native';
 import { useAudioPlayer } from 'expo-audio';
-const audioSource = 'http://complex.in.ua:80/yantarne'
+import { Animated, Easing } from 'react-native';
+const audioSource = 'http://complex.in.ua:80/yantarne';
 
 export default function App() {
   const [radioData, setRadioData] = useState(null);
   const [isRadioPlaying, setIsRadioPlaying] = useState(false);
   const [title, setTitle] = useState({ author: '', title: '' });
   const player = useAudioPlayer(audioSource);
+  const overlay1Scale = useState(new Animated.Value(1))[0];
+  const overlay2Scale = useState(new Animated.Value(1))[0];
+  const overlay3Scale = useState(new Animated.Value(1))[0];
 
   useEffect(() => {
     fetch('https://complex.in.ua/status-json.xsl?mount=/yantarne')
@@ -45,35 +49,108 @@ export default function App() {
     }
   }, [radioData]);
 
+  const pulseAnimation = (animatedValue, delay = 0) => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(animatedValue, {
+          toValue: 1.1,
+          duration: 400,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(animatedValue, {
+          toValue: 1,
+          duration: 400,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  };
+
+  useEffect(() => {
+    if (isRadioPlaying) {
+      pulseAnimation(overlay1Scale);
+      pulseAnimation(overlay2Scale, 100);
+      pulseAnimation(overlay3Scale, 200);
+    } else {
+      overlay1Scale.setValue(1);
+      overlay2Scale.setValue(1);
+      overlay3Scale.setValue(1);
+    }
+  }, [isRadioPlaying]);
+
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity
+      {/* <Animated.View
         style={[
-          styles.playBtnBorderedOverlays, styles.playBtnBorderedOverlay3
+          styles.playBtnBorderedOverlays,
+          styles.playBtnBorderedOverlay3,
+          { transform: [{ scale: overlay3Scale }] }
         ]}
       >
-        <TouchableOpacity
+        <Animated.View
           style={[
-            styles.playBtnBorderedOverlays, styles.playBtnBorderedOverlay2
+            styles.playBtnBorderedOverlays,
+            styles.playBtnBorderedOverlay2,
+            { transform: [{ scale: overlay2Scale }] }
           ]}
         >
-          <TouchableOpacity
+          <Animated.View
             style={[
-              styles.playBtnBorderedOverlays, styles.playBtnBorderedOverlay1
+              styles.playBtnBorderedOverlays,
+              styles.playBtnBorderedOverlay1,
+              { transform: [{ scale: overlay1Scale }] }
             ]}
           >
             <TouchableOpacity style={styles.playBtnOverlay}>
               <TouchableOpacity style={styles.playBtn} onPress={handlePlay}>
-                {isRadioPlaying ? <Pause color="#fff" size={52} style={styles.playIcon} weight="fill" /> : <Play color="#fff" size={52} style={styles.playIcon} weight="fill" />}
+                {isRadioPlaying
+                  ? <Pause color="#fff" size={52} style={styles.playIcon} weight="fill" />
+                  : <Play color="#fff" size={52} style={styles.playIcon} weight="fill" />}
               </TouchableOpacity>
             </TouchableOpacity>
+          </Animated.View>
+        </Animated.View>
+      </Animated.View> */}
+      <View style={styles.playContainer}>
+        <Animated.View
+          style={[
+            styles.playBtnBorderedOverlays,
+            styles.playBtnBorderedOverlay3,
+            { transform: [{ scale: overlay3Scale }] }
+          ]}
+        />
+        <Animated.View
+          style={[
+            styles.playBtnBorderedOverlays,
+            styles.playBtnBorderedOverlay2,
+            { transform: [{ scale: overlay2Scale }] }
+          ]}
+        />
+        <Animated.View
+          style={[
+            styles.playBtnBorderedOverlays,
+            styles.playBtnBorderedOverlay1,
+            { transform: [{ scale: overlay1Scale }] }
+          ]}
+        />
+
+        <TouchableOpacity style={styles.playBtnOverlay}>
+          <TouchableOpacity style={styles.playBtn} onPress={handlePlay}>
+            {isRadioPlaying
+              ? <Pause color="#fff" size={52} style={styles.playIcon} weight="fill" />
+              : <Play color="#fff" size={52} style={styles.playIcon} weight="fill" />}
           </TouchableOpacity>
         </TouchableOpacity>
-      </TouchableOpacity>
-      <View >
-        <Text style={styles.songAuthor} >{title.author ?? "Loading..."}</Text>
-        <Text style={styles.songName} >{title.title ?? "Loading..."}</Text>
+
+        <View style={styles.songInfoContainer}>
+          <Text style={styles.songAuthor}>{title.author ?? "Loading..."}</Text>
+          <Text style={styles.songName}>{title.title ?? "Loading..."}</Text>
+        </View>
       </View>
+
     </View>
   );
 }
@@ -85,13 +162,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
-    paddingHorizontal: 20
+    paddingHorizontal: 30
+  },
+  playContainer: {
+    flex: 1,
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
   },
   playBtnBorderedOverlays: {
     borderRadius: 200,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'absolute',
   },
   playBtnBorderedOverlay1: {
     width: 225,
@@ -120,7 +205,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#ffffff90',
     borderColor: '#fff',
-    borderWidth: 3
+    borderWidth: 3,
+    position: 'absolute'
   },
   playBtn: {
     width: 115,
@@ -148,5 +234,9 @@ const styles = StyleSheet.create({
   playIcon: {
     width: 70,
     height: 70,
-  }
+  },
+  songInfoContainer: {
+    position: 'absolute',
+    bottom: 220
+  },
 });

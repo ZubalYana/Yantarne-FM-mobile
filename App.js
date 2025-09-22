@@ -7,8 +7,7 @@ const audioSource = 'http://complex.in.ua:80/yantarne'
 export default function App() {
   const [radioData, setRadioData] = useState(null);
   const [isRadioPlaying, setIsRadioPlaying] = useState(false);
-  const [sound, setSound] = useState(null);
-  // const [title, setTitle] = useState({ author: '', title: '' });
+  const [title, setTitle] = useState({ author: '', title: '' });
   const player = useAudioPlayer(audioSource);
 
   useEffect(() => {
@@ -39,6 +38,13 @@ export default function App() {
     }
   }
 
+  useEffect(() => {
+    if (radioData?.icestats?.source?.title) {
+      const [author, track] = radioData.icestats.source.title.split('-').map(str => str.trim());
+      setTitle({ author, title: track });
+    }
+  }, [radioData]);
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -64,7 +70,10 @@ export default function App() {
           </TouchableOpacity>
         </TouchableOpacity>
       </TouchableOpacity>
-      <Text style={styles.songName} >{radioData?.icestats?.source?.title ?? "Loading..."}</Text>
+      <View >
+        <Text style={styles.songAuthor} >{title.author ?? "Loading..."}</Text>
+        <Text style={styles.songName} >{title.title ?? "Loading..."}</Text>
+      </View>
     </View>
   );
 }
@@ -75,7 +84,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#000000ff',
     alignItems: 'center',
     justifyContent: 'center',
-    textAlign: 'center'
+    textAlign: 'center',
+    paddingHorizontal: 20
   },
   playBtnBorderedOverlays: {
     borderRadius: 200,
@@ -121,12 +131,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#ff0000ff',
   },
-  songName: {
-    fontSize: 24,
+  songAuthor: {
+    fontSize: 28,
     color: '#fff',
     fontWeight: 'bold',
     textAlign: 'center',
-    padding: 20
+    marginTop: 20
+  },
+  songName: {
+    fontSize: 20,
+    color: '#fff',
+    fontWeight: 'semibold',
+    textAlign: 'center',
+    marginTop: 10
   },
   playIcon: {
     width: 70,

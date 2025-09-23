@@ -49,11 +49,11 @@ export default function App() {
     }
   }, [radioData]);
 
-  const pulseAnimation = (animatedValue, delay = 0) => {
+  const pulseAnimation1 = (animatedValue, delay = 0) => {
     Animated.loop(
       Animated.sequence([
         Animated.timing(animatedValue, {
-          toValue: 1.1,
+          toValue: 1.15,
           duration: 400,
           easing: Easing.inOut(Easing.ease),
           useNativeDriver: true,
@@ -68,11 +68,49 @@ export default function App() {
     ).start();
   };
 
+  const pulseAnimation2 = (animatedValue, delay = 0) => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(animatedValue, {
+          toValue: 1.3,
+          duration: 600,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(animatedValue, {
+          toValue: 1,
+          duration: 600,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  };
+
+  const pulseAnimation3 = (animatedValue, delay = 0) => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(animatedValue, {
+          toValue: 1.2,
+          duration: 500,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(animatedValue, {
+          toValue: 1,
+          duration: 500,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  };
+
   useEffect(() => {
     if (isRadioPlaying) {
-      pulseAnimation(overlay1Scale);
-      pulseAnimation(overlay2Scale, 100);
-      pulseAnimation(overlay3Scale, 200);
+      pulseAnimation1(overlay1Scale);
+      pulseAnimation2(overlay2Scale, 100);
+      pulseAnimation3(overlay3Scale, 200);
     } else {
       overlay1Scale.setValue(1);
       overlay2Scale.setValue(1);

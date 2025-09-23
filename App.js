@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
-import { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { useState, useEffect, useRef } from 'react';
 import { Play, Pause } from 'phosphor-react-native';
+import { X } from 'lucide-react-native';
 import { useAudioPlayer } from 'expo-audio';
 import { Animated, Easing } from 'react-native';
 import Logo from './assets/yantarne logo.svg';
@@ -14,6 +15,26 @@ export default function App() {
   const overlay1Scale = useState(new Animated.Value(1))[0];
   const overlay2Scale = useState(new Animated.Value(1))[0];
   const overlay3Scale = useState(new Animated.Value(1))[0];
+  const [visible, setVisible] = useState(false);
+  const slideAnim = useRef(new Animated.Value(300)).current;
+
+  useEffect(() => {
+    if (visible) {
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 300,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      }).start();
+    } else {
+      Animated.timing(slideAnim, {
+        toValue: 300,
+        duration: 300,
+        easing: Easing.in(Easing.ease),
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [visible]);
 
   useEffect(() => {
     fetch('https://complex.in.ua/status-json.xsl?mount=/yantarne')
@@ -126,11 +147,11 @@ export default function App() {
       <View style={styles.logoContainer}>
         <Logo width={120} height={50} />
       </View>
-      <View style={styles.burger}>
+      <TouchableOpacity style={styles.burger} onPress={() => setVisible(true)}>
         <View style={styles.burgerRow}></View>
         <View style={styles.burgerRow}></View>
         <View style={styles.burgerRow}></View>
-      </View>
+      </TouchableOpacity>
       <View style={styles.playContainer}>
         <Animated.View
           style={[
@@ -167,6 +188,25 @@ export default function App() {
           <Text style={styles.songName}>{title.title ?? "Loading..."}</Text>
         </View>
       </View>
+
+      {visible && (
+        <TouchableOpacity
+          style={styles.backdrop}
+          activeOpacity={1}
+          onPress={() => setVisible(false)}
+        />
+      )}
+      <Animated.View
+        style={[
+          styles.sideMenu,
+          { transform: [{ translateX: slideAnim }] }
+        ]}
+      >
+        <TouchableOpacity onPress={() => setVisible(false)}>
+          <X size={32} strokeWidth={2.5} style={styles.modalCloseBtn} />
+        </TouchableOpacity>
+        <Text style={{ color: "#fff", marginTop: 100 }}>Menu content</Text>
+      </Animated.View>
     </View>
   );
 }
@@ -253,7 +293,7 @@ const styles = StyleSheet.create({
   },
   songInfoContainer: {
     position: 'absolute',
-    bottom: 220
+    bottom: 215
   },
   burger: {
     width: 32,
@@ -275,5 +315,22 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 83,
     left: 20,
+  },
+  backdrop: {
+    position: 'absolute',
+    top: 0, left: 0, right: 0, bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  sideMenu: {
+    position: 'absolute',
+    top: 0,
+    right: -7,
+    width: '80%',
+    height: '100%',
+    backgroundColor: '#ff0000',
+    padding: 15,
+  },
+  modalCloseBtn: {
+    marginTop: 60,
   }
 });

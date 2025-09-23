@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { useState, useEffect } from 'react';
 import { Play, Pause } from 'phosphor-react-native';
 import { useAudioPlayer } from 'expo-audio';
 import { Animated, Easing } from 'react-native';
+import Logo from './assets/yantarne logo.svg';
 const audioSource = 'http://complex.in.ua:80/yantarne';
 
 export default function App() {
@@ -48,6 +49,7 @@ export default function App() {
       setTitle({ author, title: track });
     }
   }, [radioData]);
+
 
   const pulseAnimation1 = (animatedValue, delay = 0) => {
     Animated.loop(
@@ -121,6 +123,14 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Logo width={120} height={50} />
+      </View>
+      <View style={styles.burger}>
+        <View style={styles.burgerRow}></View>
+        <View style={styles.burgerRow}></View>
+        <View style={styles.burgerRow}></View>
+      </View>
       <View style={styles.playContainer}>
         <Animated.View
           style={[
@@ -245,4 +255,25 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 220
   },
+  burger: {
+    width: 32,
+    height: 23,
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'column',
+    position: 'absolute',
+    top: 100,
+    right: 20
+  },
+  burgerRow: {
+    width: '100%',
+    height: 2,
+    backgroundColor: '#ff0000ff',
+    borderRadius: 8
+  },
+  logoContainer: {
+    position: 'absolute',
+    top: 83,
+    left: 20,
+  }
 });

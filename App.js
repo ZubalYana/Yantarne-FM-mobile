@@ -83,37 +83,6 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      {/* <Animated.View
-        style={[
-          styles.playBtnBorderedOverlays,
-          styles.playBtnBorderedOverlay3,
-          { transform: [{ scale: overlay3Scale }] }
-        ]}
-      >
-        <Animated.View
-          style={[
-            styles.playBtnBorderedOverlays,
-            styles.playBtnBorderedOverlay2,
-            { transform: [{ scale: overlay2Scale }] }
-          ]}
-        >
-          <Animated.View
-            style={[
-              styles.playBtnBorderedOverlays,
-              styles.playBtnBorderedOverlay1,
-              { transform: [{ scale: overlay1Scale }] }
-            ]}
-          >
-            <TouchableOpacity style={styles.playBtnOverlay}>
-              <TouchableOpacity style={styles.playBtn} onPress={handlePlay}>
-                {isRadioPlaying
-                  ? <Pause color="#fff" size={52} style={styles.playIcon} weight="fill" />
-                  : <Play color="#fff" size={52} style={styles.playIcon} weight="fill" />}
-              </TouchableOpacity>
-            </TouchableOpacity>
-          </Animated.View>
-        </Animated.View>
-      </Animated.View> */}
       <View style={styles.playContainer}>
         <Animated.View
           style={[
@@ -150,7 +119,6 @@ export default function App() {
           <Text style={styles.songName}>{title.title ?? "Loading..."}</Text>
         </View>
       </View>
-
     </View>
   );
 }

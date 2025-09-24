@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity, Pressable, Modal, TextInput, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
 import { useState, useEffect, useRef } from 'react';
-import { Play, Pause, BookmarkSimpleIcon, GearIcon, HeadsetIcon, SignOut } from 'phosphor-react-native';
-import { X } from 'lucide-react-native';
+import { Play, Pause, BookmarkSimpleIcon, GearIcon, HeadsetIcon, SignOut, MusicNote, SneakerMove, GameController } from 'phosphor-react-native';
+import { X, ChevronRight, Plus } from 'lucide-react-native';
 import { useAudioPlayer } from 'expo-audio';
 import { Animated, Easing } from 'react-native';
 import Logo from './assets/yantarne logo.svg';
@@ -332,6 +332,66 @@ export default function App() {
                     keyboardType="default"
                     placeholderTextColor="#000000ff"
                   />
+
+                  <View style={{ marginTop: 12 }}>
+                    <Pressable
+                      style={({ pressed }) => [
+                        styles.savedCategory,
+                        {
+                          backgroundColor: pressed ? "#430909ff" : "#000000ff"
+                        },
+                      ]}
+                    >
+                      <MusicNote size={40} color='#ff0000' weight='fill' />
+                      <View style={{ marginLeft: 8 }}>
+                        <Text style={{ color: "#ff0000", fontWeight: 600, fontSize: 20 }}>#все</Text>
+                        <Text style={{ color: "#ffffffff", fontWeight: 300, fontSize: 12, marginTop: 2 }}>Кількість пісень: <Text style={{ fontWeight: 600 }}>32</Text></Text>
+                      </View>
+                      <ChevronRight color='#ff0000' size={28} style={{ position: 'absolute', right: 20 }} />
+                    </Pressable>
+
+                    <Pressable
+                      style={({ pressed }) => [
+                        styles.savedCategory,
+                        {
+                          backgroundColor: pressed ? "#430909ff" : "#000000ff"
+                        },
+                      ]}
+                    >
+                      <SneakerMove size={38} color='#ff0000' weight='fill' />
+                      <View style={{ marginLeft: 10 }}>
+                        <Text style={{ color: "#ff0000", fontWeight: 600, fontSize: 20 }}>#спорт</Text>
+                        <Text style={{ color: "#ffffffff", fontWeight: 300, fontSize: 12, marginTop: 2 }}>Кількість пісень: <Text style={{ fontWeight: 600 }}>19</Text></Text>
+                      </View>
+                      <ChevronRight color='#ff0000' size={28} style={{ position: 'absolute', right: 20 }} />
+                    </Pressable>
+                    <Pressable
+                      style={({ pressed }) => [
+                        styles.savedCategory,
+                        {
+                          backgroundColor: pressed ? "#430909ff" : "#000000ff"
+                        },
+                      ]}
+                    >
+                      <GameController size={35} color='#ff0000' weight='fill' />
+                      <View style={{ marginLeft: 13 }}>
+                        <Text style={{ color: "#ff0000", fontWeight: 600, fontSize: 20 }}>#ігри</Text>
+                        <Text style={{ color: "#ffffffff", fontWeight: 300, fontSize: 12, marginTop: 2 }}>Кількість пісень: <Text style={{ fontWeight: 600 }}>13</Text></Text>
+                      </View>
+                      <ChevronRight color='#ff0000' size={28} style={{ position: 'absolute', right: 20 }} />
+                    </Pressable>
+                    <Pressable
+                      style={({ pressed }) => [
+                        styles.savedCategory,
+                        {
+                          backgroundColor: pressed ? "#430909ff" : "#000000ff",
+                          justifyContent: 'center'
+                        },
+                      ]}
+                    >
+                      <Plus color='#ff0000' size={40} style={{ fontWeight: 600 }} />
+                    </Pressable>
+                  </View>
                 </View>
 
               </View>
@@ -478,4 +538,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10
   },
+  savedCategory: {
+    width: '100%',
+    height: 75,
+    backgroundColor: '#000000ff',
+    borderRadius: 8,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 15,
+    padding: 15,
+    position: 'relative'
+  }
 });

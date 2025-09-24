@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity, Pressable } from 'react-native';
 import { useState, useEffect, useRef } from 'react';
-import { Play, Pause, BookmarkSimpleIcon, GearIcon, HeadsetIcon } from 'phosphor-react-native';
+import { Play, Pause, BookmarkSimpleIcon, GearIcon, HeadsetIcon, SignOut } from 'phosphor-react-native';
 import { X } from 'lucide-react-native';
 import { useAudioPlayer } from 'expo-audio';
 import { Animated, Easing } from 'react-native';
@@ -270,6 +270,28 @@ export default function App() {
             <Text style={{ color: "#000000ff", fontSize: 20, fontWeight: 'semi-bold' }}>Допомога</Text>
           </Pressable>
         </View>
+
+        <Pressable
+          style={({ pressed }) => [
+            styles.menuOption,
+            {
+              backgroundColor: pressed ? "#e00000ff" : "#ff0000ff",
+              padding: 10,
+              borderRadius: 8,
+              position: 'absolute',
+              bottom: 30,
+              left: 15
+            },
+          ]}
+        >
+          <SignOut
+            size={33}
+            color="#000"
+            weight="fill"
+            style={{ marginRight: 8 }}
+          />
+          <Text style={{ color: "#000000ff", fontSize: 20, fontWeight: 'semi-bold' }}>Вийти</Text>
+        </Pressable>
       </Animated.View>
     </View >
   );

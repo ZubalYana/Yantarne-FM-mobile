@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Pressable } from 'react-native';
 import { useState, useEffect, useRef } from 'react';
-import { Play, Pause } from 'phosphor-react-native';
+import { Play, Pause, BookmarkSimpleIcon, GearIcon, HeadsetIcon } from 'phosphor-react-native';
 import { X } from 'lucide-react-native';
 import { useAudioPlayer } from 'expo-audio';
 import { Animated, Easing } from 'react-native';
@@ -28,7 +28,7 @@ export default function App() {
       }).start();
     } else {
       Animated.timing(slideAnim, {
-        toValue: 300,
+        toValue: 350,
         duration: 300,
         easing: Easing.in(Easing.ease),
         useNativeDriver: true,
@@ -202,12 +202,76 @@ export default function App() {
           { transform: [{ translateX: slideAnim }] }
         ]}
       >
-        <TouchableOpacity onPress={() => setVisible(false)}>
-          <X size={32} strokeWidth={2.5} style={styles.modalCloseBtn} />
+
+        <TouchableOpacity onPress={() => setVisible(false)} style={{ marginTop: 60 }}>
+          <X size={32} strokeWidth={2.5} color='#000' />
         </TouchableOpacity>
-        <Text style={{ color: "#fff", marginTop: 100 }}>Menu content</Text>
+
+        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: 30 }}>
+          <View style={styles.defaultUserIcon}>
+            <Text style={{ color: '#fff', fontSize: 28, fontWeight: 700 }}>U</Text>
+          </View>
+          <Text style={{ color: "#000000ff", fontSize: 24, fontWeight: 'bold', marginLeft: 14 }}>Username</Text>
+        </View>
+
+        <View style={{ marginTop: 30 }}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.menuOption,
+              {
+                backgroundColor: pressed ? "#e00000ff" : "#ff0000ff",
+                padding: 10,
+                borderRadius: 8,
+              },
+            ]}
+          >
+            <BookmarkSimpleIcon
+              size={35}
+              color="#000"
+              weight="fill"
+              style={{ marginRight: 8 }}
+            />
+            <Text style={{ color: "#000000ff", fontSize: 20, fontWeight: 'semi-bold' }}>Збережені</Text>
+          </Pressable>
+          <Pressable
+            style={({ pressed }) => [
+              styles.menuOption,
+              {
+                backgroundColor: pressed ? "#e00000ff" : "#ff0000ff",
+                padding: 10,
+                borderRadius: 8,
+              },
+            ]}
+          >
+            <GearIcon
+              size={33}
+              color="#000"
+              weight="fill"
+              style={{ marginRight: 8 }}
+            />
+            <Text style={{ color: "#000000ff", fontSize: 20, fontWeight: 'semi-bold' }}>Налаштування</Text>
+          </Pressable>
+          <Pressable
+            style={({ pressed }) => [
+              styles.menuOption,
+              {
+                backgroundColor: pressed ? "#e00000ff" : "#ff0000ff",
+                padding: 10,
+                borderRadius: 8,
+              },
+            ]}
+          >
+            <HeadsetIcon
+              size={33}
+              color="#000"
+              weight="fill"
+              style={{ marginRight: 8 }}
+            />
+            <Text style={{ color: "#000000ff", fontSize: 20, fontWeight: 'semi-bold' }}>Допомога</Text>
+          </Pressable>
+        </View>
       </Animated.View>
-    </View>
+    </View >
   );
 }
 
@@ -324,13 +388,26 @@ const styles = StyleSheet.create({
   sideMenu: {
     position: 'absolute',
     top: 0,
-    right: -7,
-    width: '80%',
+    right: 0,
+    width: '90%',
     height: '100%',
     backgroundColor: '#ff0000',
     padding: 15,
   },
-  modalCloseBtn: {
-    marginTop: 60,
-  }
+  defaultUserIcon: {
+    width: 60,
+    height: 60,
+    backgroundColor: '#000',
+    borderRadius: 20,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  menuOption: {
+    width: '100%',
+    flexDirection: 'row',
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: 10
+  },
 });

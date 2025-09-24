@@ -1,10 +1,12 @@
-import { StyleSheet, Text, View, TouchableOpacity, Pressable } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Pressable, Modal, TextInput, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
 import { useState, useEffect, useRef } from 'react';
 import { Play, Pause, BookmarkSimpleIcon, GearIcon, HeadsetIcon, SignOut } from 'phosphor-react-native';
 import { X } from 'lucide-react-native';
 import { useAudioPlayer } from 'expo-audio';
 import { Animated, Easing } from 'react-native';
 import Logo from './assets/yantarne logo.svg';
+import LogoBlack from './assets/yantarne logo black.svg';
+
 const audioSource = 'http://complex.in.ua:80/yantarne';
 
 export default function App() {
@@ -17,6 +19,7 @@ export default function App() {
   const overlay3Scale = useState(new Animated.Value(1))[0];
   const [visible, setVisible] = useState(false);
   const slideAnim = useRef(new Animated.Value(300)).current;
+  const [isSavedVisible, setIsSavedVisible] = useState(false);
 
   useEffect(() => {
     if (visible) {
@@ -224,6 +227,10 @@ export default function App() {
                 borderRadius: 8,
               },
             ]}
+            onPress={() => {
+              setIsSavedVisible(true)
+              setVisible(false)
+            }}
           >
             <BookmarkSimpleIcon
               size={35}
@@ -293,6 +300,45 @@ export default function App() {
           <Text style={{ color: "#000000ff", fontSize: 20, fontWeight: 'semi-bold' }}>Вийти</Text>
         </Pressable>
       </Animated.View>
+
+      <Modal visible={isSavedVisible} animationType="slide" transparent={true}>
+        <KeyboardAvoidingView
+          style={{ flex: 1, width: '100%' }}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} width={'100%'}>
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
+              <View style={{ backgroundColor: "#ff0000ff", padding: 20, borderRadius: 10, width: '90%', height: '85%', alignItems: 'center' }}>
+                <TouchableOpacity
+                  onPress={() => setIsSavedVisible(false)}
+                  style={{ position: 'absolute', top: 15, right: 15 }}
+                >
+                  <X size={32} strokeWidth={2.5} color='#000' />
+                </TouchableOpacity>
+                <LogoBlack height={70} marginTop={10} />
+                <Text style={{ color: "#000000ff", fontSize: 24, fontWeight: 'bold', marginTop: 20 }}>Збережені</Text>
+
+                <View style={{ flex: 1, width: '100%' }}>
+                  <TextInput
+                    style={{
+                      width: "100%",
+                      height: 40,
+                      borderColor: "black",
+                      borderWidth: 2,
+                      marginTop: 20,
+                      paddingLeft: 10,
+                      borderRadius: 8,
+                    }}
+                    placeholder="Пошук..."
+                    keyboardType="default"
+                    placeholderTextColor="#000000ff"
+                  />
+                </View>
+
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </Modal>
     </View >
   );
 }

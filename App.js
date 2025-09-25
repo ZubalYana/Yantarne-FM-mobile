@@ -21,6 +21,27 @@ export default function App() {
   const slideAnim = useRef(new Animated.Value(300)).current;
   const [isSavedVisible, setIsSavedVisible] = useState(false);
 
+  const savedCategories = [
+    {
+      id: 1,
+      icon: <MusicNote size={40} color='#ff0000' weight='fill' />,
+      hashtag: 'все',
+      songsAmount: 32
+    },
+    {
+      id: 2,
+      icon: <SneakerMove size={40} color='#ff0000' weight='fill' />,
+      hashtag: 'спорт',
+      songsAmount: 19
+    },
+    {
+      id: 3,
+      icon: <GameController size={40} color='#ff0000' weight='fill' />,
+      hashtag: 'ігри',
+      songsAmount: 13
+    },
+  ]
+
   useEffect(() => {
     if (visible) {
       Animated.timing(slideAnim, {
@@ -334,52 +355,24 @@ export default function App() {
                   />
 
                   <View style={{ marginTop: 12 }}>
-                    <Pressable
-                      style={({ pressed }) => [
-                        styles.savedCategory,
-                        {
-                          backgroundColor: pressed ? "#430909ff" : "#000000ff"
-                        },
-                      ]}
-                    >
-                      <MusicNote size={40} color='#ff0000' weight='fill' />
-                      <View style={{ marginLeft: 8 }}>
-                        <Text style={{ color: "#ff0000", fontWeight: 600, fontSize: 20 }}>#все</Text>
-                        <Text style={{ color: "#ffffffff", fontWeight: 300, fontSize: 12, marginTop: 2 }}>Кількість пісень: <Text style={{ fontWeight: 600 }}>32</Text></Text>
-                      </View>
-                      <ChevronRight color='#ff0000' size={28} style={{ position: 'absolute', right: 20 }} />
-                    </Pressable>
-
-                    <Pressable
-                      style={({ pressed }) => [
-                        styles.savedCategory,
-                        {
-                          backgroundColor: pressed ? "#430909ff" : "#000000ff"
-                        },
-                      ]}
-                    >
-                      <SneakerMove size={38} color='#ff0000' weight='fill' />
-                      <View style={{ marginLeft: 10 }}>
-                        <Text style={{ color: "#ff0000", fontWeight: 600, fontSize: 20 }}>#спорт</Text>
-                        <Text style={{ color: "#ffffffff", fontWeight: 300, fontSize: 12, marginTop: 2 }}>Кількість пісень: <Text style={{ fontWeight: 600 }}>19</Text></Text>
-                      </View>
-                      <ChevronRight color='#ff0000' size={28} style={{ position: 'absolute', right: 20 }} />
-                    </Pressable>
-                    <Pressable
-                      style={({ pressed }) => [
-                        styles.savedCategory,
-                        {
-                          backgroundColor: pressed ? "#430909ff" : "#000000ff"
-                        },
-                      ]}
-                    >
-                      <GameController size={35} color='#ff0000' weight='fill' />
-                      <View style={{ marginLeft: 13 }}>
-                        <Text style={{ color: "#ff0000", fontWeight: 600, fontSize: 20 }}>#ігри</Text>
-                        <Text style={{ color: "#ffffffff", fontWeight: 300, fontSize: 12, marginTop: 2 }}>Кількість пісень: <Text style={{ fontWeight: 600 }}>13</Text></Text>
-                      </View>
-                      <ChevronRight color='#ff0000' size={28} style={{ position: 'absolute', right: 20 }} />
-                    </Pressable>
+                    {savedCategories.map((category) => (
+                      <Pressable
+                        style={({ pressed }) => [
+                          styles.savedCategory,
+                          {
+                            backgroundColor: pressed ? "#430909ff" : "#000000ff"
+                          },
+                        ]}
+                        key={category.id}
+                      >
+                        {category.icon}
+                        <View style={{ marginLeft: 8 }}>
+                          <Text style={{ color: "#ff0000", fontWeight: 600, fontSize: 20 }}>#{category.hashtag}</Text>
+                          <Text style={{ color: "#ffffffff", fontWeight: 300, fontSize: 12, marginTop: 2 }}>Кількість пісень: <Text style={{ fontWeight: 600 }}>{category.songsAmount}</Text></Text>
+                        </View>
+                        <ChevronRight color='#ff0000' size={28} style={{ position: 'absolute', right: 20 }} />
+                      </Pressable>
+                    ))}
                     <Pressable
                       style={({ pressed }) => [
                         styles.savedCategory,
